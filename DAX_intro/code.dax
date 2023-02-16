@@ -1,0 +1,120 @@
+T01 = 'Product'
+
+T02 = ALL('Product')
+
+T03 = ALL('Product'[Category],
+          'Product'[Subcategory])
+
+T04 = VALUES('Product'[Category])
+
+T05 = DISTINCT('Product'[Category])
+
+T06 = SUMMARIZE(
+                'Product',
+                'Product'[Category],
+                'Product'[Subcategory]
+)
+
+T07 = FILTER(
+             'Product',
+             'Product'[Category]="Bikes"
+            )
+
+
+T08 = FILTER(
+             'Product',
+             'Product'[Category] in {"Bikes","Components"} && 
+             'Product'[Color] = "Black"
+            )
+
+
+T09 = FILTER(
+             'Sales', 
+             RELATED('Product'[Color])="Red"
+            )
+
+T10 = SUMMARIZE(
+                FILTER('Product',
+                       'Product'[Category] in {"Bikes","Components"} && 
+                       'Product'[Color] = "Black"
+                      ),
+               'Product'[Category],
+               'Product'[Subcategory]
+               )
+
+M01 = COUNT('Product'[ProductKey])
+
+M02 = COUNTX('Product',
+             'Product'[ProductKey]
+            )
+
+M03 = COUNTX(FILTER('Product',
+                    'Product'[Category] in {"Bikes","Components"} && 
+                    'Product'[Color] = "Black"
+                   ),
+             'Product'[ProductKey]
+            )
+
+M04 = SUMX(Sales,
+           Sales[Order Quantity]*Sales[Unit Price]
+          )
+
+M05 = SUMX(FILTER(Sales, 
+                  RELATED('Product'[Color])="Red"
+                 ),
+           Sales[Order Quantity]*Sales[Unit Price]
+          )
+
+M06 = CALCULATE(
+                SUMX(Sales,
+                     Sales[Order Quantity]*Sales[Unit Price]
+                     ),
+               'Product'[Color]="RED"
+               )
+
+M07 = CALCULATE(
+                SUMX(Sales,
+                     Sales[Order Quantity]*Sales[Unit Price]
+                     ),
+               KEEPFILTERS('Product'[Color]="RED")
+               )
+
+M08 = CALCULATE(
+                [M04],
+               KEEPFILTERS('Product'[Color]="RED")
+               )
+
+
+Product Color = T01[ProductKey]&" - "&T01[Product]&" - "& T01[Color]
+
+Product = RELATED('Product'[Product])
+
+P01 = SUMX(Sales,
+          Sales[Order Quantity]*Sales[Unit Price]
+          )
+
+P02 = CALCULATE(
+            SUMX(Sales,
+            Sales[Order Quantity]*Sales[Unit Price]
+             )
+            ) 
+
+P03 = [M04] 
+
+P04 = CALCULATE([M04]) 
+
+M09 = CALCULATE(
+                 [M04],
+                 FILTER(ALL('Product'[Color]),
+                        [M04] > 18000000
+                       )
+                )
+
+M10 = CALCULATE(
+                 [M04],
+                 KEEPFILTERS(
+                             FILTER(ALL('Product'[Color]),
+                                    [M04] > 18000000
+                                   )
+                            )
+                )
